@@ -386,7 +386,6 @@ public class IR2JConverter implements Opcodes {
             default:
                 throw new RuntimeException("not support st: " + st.st);
             }
-
         }
     }
 
@@ -911,7 +910,24 @@ public class IR2JConverter implements Opcodes {
             break;
         case NEG:
             asm.visitInsn(getOpcode(e1, INEG));
-            break;
+				break;
+		case NOT:
+			switch (e1.valueType.charAt(0)) {
+			case 'I':
+				accept(Exprs.nInt(-1), asm);
+				break;
+			case 'J':
+				accept(Exprs.nLong(-1), asm);
+				break;
+			default:
+				System.out.println("Unexpect NOT VT op Type " + e1.valueType);
+				break;
+						
+			}
+			asm.visitInsn(getOpcode(e1, IXOR));
+			break;
+		default:
+			break;
         }
     }
 
